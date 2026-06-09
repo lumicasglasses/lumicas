@@ -220,12 +220,15 @@ a.detail-value:hover { color: var(--accent); }
 
 .footer {
   position: relative; z-index: 10;
-  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
-  padding: 34px clamp(22px, 8vw, 140px);
+  display: flex; justify-content: center; align-items: center;
+  flex-wrap: wrap; gap: 8px 18px;
+  padding: 30px clamp(22px, 8vw, 140px);
   font-size: 12px; letter-spacing: .12em; color: var(--muted);
   border-top: 1px solid var(--line);
   background: var(--bg-2);
+  text-align: center;
 }
+.footer .foot-copy { display: inline-flex; gap: .4em; align-items: center; flex-wrap: wrap; justify-content: center; }
 .footer .credit { color: var(--accent); font-weight: 600; letter-spacing: .14em; }
 
 /* RTL: tame the wide Latin letter-spacing for Hebrew running text */
