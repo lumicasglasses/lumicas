@@ -226,6 +226,7 @@ a.detail-value:hover { color: var(--accent); }
   border-top: 1px solid var(--line);
   background: var(--bg-2);
 }
+.footer .credit { color: var(--accent); font-weight: 600; letter-spacing: .14em; }
 
 /* RTL: tame the wide Latin letter-spacing for Hebrew running text */
 [dir="rtl"] .hero-name, [dir="rtl"] .slide-desc, [dir="rtl"] .nav-links a { letter-spacing: .02em; }
