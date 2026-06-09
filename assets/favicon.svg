@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="LUMIC">
+  <rect width="48" height="48" rx="11" fill="#1b1916"/>
+  <g transform="translate(24 24)" fill="none" stroke="#b5673a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <circle r="13"/>
+    <!-- three-blade emblem echoing the mark on the glasses temple -->
+    <path d="M0 0 L0 -10"/>
+    <path d="M0 0 L8.7 5"/>
+    <path d="M0 0 L-8.7 5"/>
+    <circle r="2.6" fill="#b5673a" stroke="none"/>
+  </g>
+</svg>

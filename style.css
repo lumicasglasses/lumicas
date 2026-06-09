@@ -1,0 +1,239 @@
+:root {
+  --bg: #e7e2d9;          /* warm cream — matches the video wall so letterbox bars blend */
+  --bg-2: #ddd6ca;
+  --ink: #1b1916;         /* near-black warm charcoal — text & wordmark */
+  --ink-soft: #46423b;
+  --muted: #645e54;       /* AA on cream */
+  --accent: #964e28;      /* AA-safe copper for small text / labels */
+  --accent-bright: #b5673a;/* decorative copper (marks, large) */
+  --line: rgba(27,25,22,.14);
+  --scrim: rgba(231,226,217,.62);
+  --font-display: "Space Grotesk", "Heebo", "Noto Sans", sans-serif;
+  --font-body: "Inter", "Heebo", "Noto Sans", system-ui, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; overflow-x: hidden; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.mark { height: 1em; width: auto; color: var(--ink); }
+
+/* ---------- Loader ---------- */
+.loader {
+  position: fixed; inset: 0; z-index: 1000;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity .8s ease, visibility .8s ease;
+}
+.loader.hidden { opacity: 0; visibility: hidden; }
+.loader-inner { text-align: center; width: min(340px, 74vw); }
+.loader-mark {
+  display: flex; align-items: center; justify-content: center; gap: .5em;
+  font-size: clamp(34px, 7vw, 58px); color: var(--ink);
+}
+.loader-mark .wordmark {
+  font-family: var(--font-display); font-weight: 600;
+  letter-spacing: .22em; padding-inline-start: .22em;
+}
+.loader-bar {
+  margin: 28px 0 14px; height: 2px; width: 100%;
+  background: rgba(27,25,22,.12); overflow: hidden; border-radius: 2px;
+}
+.loader-fill { height: 100%; width: 0%; background: var(--accent-bright); transition: width .2s ease; }
+.loader-pct { font-size: 12px; letter-spacing: .3em; color: var(--muted); }
+
+/* ---------- Nav ---------- */
+.nav {
+  position: fixed; top: 0; inset-inline: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px clamp(20px, 5vw, 64px);
+  color: var(--ink);
+}
+.nav-brand {
+  display: flex; align-items: center; gap: .45em;
+  font-size: 24px; color: var(--ink);
+}
+.nav-brand .wordmark {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: 20px; letter-spacing: .26em; padding-inline-start: .26em;
+}
+.nav-links { display: flex; gap: clamp(16px, 3vw, 38px); }
+.nav-links a {
+  color: inherit; text-decoration: none; font-size: 13px;
+  letter-spacing: .1em; opacity: .8; transition: opacity .3s, color .3s;
+}
+.nav-links a:hover { opacity: 1; color: var(--accent); }
+
+.lang-switch { display: flex; gap: 2px; }
+.lang-switch button {
+  background: transparent; border: 0; cursor: pointer; color: inherit;
+  font-family: var(--font-display); font-size: 12px; letter-spacing: .1em;
+  padding: 6px 7px; opacity: .5; transition: opacity .3s; line-height: 1;
+}
+.lang-switch button:hover { opacity: .85; }
+.lang-switch button.active { opacity: 1; border-bottom: 1.5px solid var(--accent-bright); }
+
+/* ---------- Scroll video ---------- */
+/* Canvas is a FIXED background. The video scrubs as you scroll through
+   .scroll-video; afterward the last frame stays as the background and the
+   content slides appear over it one by one. Contain-fit: whole frame visible,
+   cream letterbox bars that blend into the page. */
+#frameCanvas {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  display: block; z-index: 0; background: var(--bg);
+}
+.scroll-video { position: relative; height: 760vh; z-index: 1; }
+.sticky-stage {
+  position: sticky; top: 0; height: 100vh; width: 100%;
+  overflow: hidden; background: transparent; pointer-events: none;
+}
+
+.hero-overlay {
+  position: absolute; inset: 0; z-index: 5;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; pointer-events: none;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(58px, 15vw, 200px);
+  font-weight: 700; letter-spacing: .14em; line-height: 1;
+  color: var(--ink); text-shadow: 0 2px 30px rgba(231,226,217,.7);
+  padding-inline-start: .14em;
+}
+.hero-name {
+  margin-top: 16px; font-size: clamp(14px, 2vw, 21px);
+  letter-spacing: .14em; color: var(--ink-soft); font-weight: 400;
+  text-shadow: 0 1px 16px rgba(231,226,217,.85);
+}
+.hero-sub {
+  margin-top: 18px; font-size: clamp(11px, 1.3vw, 14px);
+  letter-spacing: .35em; color: var(--muted); font-weight: 500;
+}
+
+/* Feature captions running over the video as it scrubs — kept in the lower,
+   clean part of the frame (below the floating glasses), dark text + light halo. */
+.hero-captions {
+  position: absolute; inset: 0; z-index: 7; pointer-events: none;
+  background: linear-gradient(to top, rgba(231,226,217,.92) 0%, rgba(231,226,217,.55) 22%, rgba(231,226,217,0) 46%);
+}
+.hero-caption {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  text-align: center; gap: 14px; padding: 0 clamp(22px, 8vw, 160px) 13vh;
+  opacity: 0; transform: translateY(30px);
+  transition: opacity .5s cubic-bezier(.22,.61,.36,1), transform .55s cubic-bezier(.22,.61,.36,1);
+}
+.hero-caption.active { opacity: 1; transform: none; }
+.hero-caption-num {
+  font-family: var(--font-display); font-size: clamp(15px, 1.8vw, 20px);
+  color: var(--accent); letter-spacing: .35em; font-weight: 500;
+}
+.hero-caption-name {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: clamp(32px, 6vw, 76px); line-height: 1.05; max-width: 18ch;
+  color: var(--ink); text-shadow: 0 2px 26px rgba(231,226,217,.95);
+}
+.hero-caption-desc {
+  font-size: clamp(15px, 2vw, 21px); color: var(--ink-soft);
+  font-weight: 400; line-height: 1.6; max-width: 46ch;
+  text-shadow: 0 1px 18px rgba(231,226,217,.95);
+}
+
+.scroll-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  width: 1px; height: 46px; background: rgba(27,25,22,.22); overflow: hidden; z-index: 6;
+}
+.scroll-hint span {
+  display: block; width: 100%; height: 40%; background: var(--accent-bright);
+  animation: drop 1.8s cubic-bezier(.7,0,.3,1) infinite;
+}
+@keyframes drop { 0% { transform: translateY(-100%); } 100% { transform: translateY(250%); } }
+
+/* ---------- Content (over the fixed last frame) ---------- */
+.content { position: relative; z-index: 10; background: transparent; }
+
+.reveal-scroll { position: relative; z-index: 10; }
+.reveal-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.reveal-stage::before {
+  content: ""; position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse at center, rgba(231,226,217,.5) 0%, rgba(231,226,217,.66) 60%, rgba(231,226,217,.82) 100%);
+}
+.slide {
+  position: absolute; inset: 0; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; gap: 18px;
+  padding: 0 clamp(22px, 8vw, 160px);
+  opacity: 0; transform: translateY(44px) scale(.99);
+  transition: opacity .5s cubic-bezier(.22,.61,.36,1), transform .55s cubic-bezier(.22,.61,.36,1);
+  pointer-events: none; will-change: opacity, transform;
+}
+.slide.active { opacity: 1; transform: none; pointer-events: auto; }
+.eyebrow { font-size: 12px; letter-spacing: .3em; color: var(--accent); font-weight: 500; }
+.slide-title {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: clamp(36px, 7vw, 92px); line-height: 1.06; max-width: 20ch;
+  color: var(--ink); text-shadow: 0 2px 30px rgba(231,226,217,.9);
+}
+.slide-desc {
+  font-size: clamp(16px, 2.1vw, 22px); color: var(--ink-soft);
+  font-weight: 400; line-height: 1.7; max-width: 52ch;
+  text-shadow: 0 1px 18px rgba(231,226,217,.92);
+}
+
+.contact-details {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: clamp(26px, 5vw, 60px); margin: 30px 0 34px;
+}
+.detail { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.detail-label { font-size: 12px; letter-spacing: .22em; color: var(--accent); text-transform: uppercase; font-weight: 600; }
+.detail-value { font-size: clamp(18px, 2vw, 24px); color: var(--ink); font-weight: 500; text-decoration: none; }
+a.detail-value:hover { color: var(--accent); }
+
+.cta {
+  display: inline-block; padding: 16px 44px; align-self: center;
+  background: var(--accent); border: 1.5px solid var(--accent);
+  color: #fdfaf4; text-decoration: none; letter-spacing: .12em; font-size: 14px;
+  font-weight: 600; border-radius: 2px;
+  transition: background .35s, color .35s, transform .2s;
+}
+.cta:hover { background: #7d3f1f; border-color: #7d3f1f; transform: translateY(-1px); }
+
+/* progress dots */
+.reveal-dots {
+  position: absolute; z-index: 3; top: 50%; transform: translateY(-50%);
+  inset-inline-start: clamp(16px, 3vw, 40px);
+  display: flex; flex-direction: column; gap: 12px;
+}
+.reveal-dots button {
+  width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%;
+  background: rgba(27,25,22,.25); cursor: pointer; transition: all .3s;
+}
+.reveal-dots button.on { background: var(--accent-bright); transform: scale(1.4); }
+@media (max-width: 640px) { .reveal-dots { display: none; } }
+
+.footer {
+  position: relative; z-index: 10;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  padding: 34px clamp(22px, 8vw, 140px);
+  font-size: 12px; letter-spacing: .12em; color: var(--muted);
+  border-top: 1px solid var(--line);
+  background: var(--bg-2);
+}
+
+/* RTL: tame the wide Latin letter-spacing for Hebrew running text */
+[dir="rtl"] .hero-name, [dir="rtl"] .slide-desc, [dir="rtl"] .nav-links a { letter-spacing: .02em; }
+
+@media (max-width: 640px) {
+  .nav { padding: 16px 20px; }
+  .nav-links { gap: 15px; }
+  .nav-links a { font-size: 11px; }
+  .nav-brand .wordmark { font-size: 17px; }
+  .hero-caption { padding-bottom: 16vh; }
+}

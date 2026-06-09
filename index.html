@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!-- LUMIC — AI Smart Glasses. Scroll-video landing page. Default lang: Hebrew (RTL). -->
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="meta_title">LUMIC — משקפי AI חכמים</title>
+  <meta name="description" content="" data-i18n="meta_desc" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Heebo:wght@300;400;500;700&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="loader" class="loader">
+    <div class="loader-inner">
+      <div class="loader-mark">
+        <svg class="mark" viewBox="0 0 72 28" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="7" width="24" height="17" rx="6.5"/>
+            <rect x="45" y="7" width="24" height="17" rx="6.5"/>
+            <path d="M27 12 C32 8, 40 8, 45 12"/>
+            <path d="M3 11 L0 9"/><path d="M69 11 L72 9"/>
+          </g>
+          <g stroke="var(--accent-bright)" stroke-width="1.7" stroke-linecap="round">
+            <path d="M57 11.5 L57 8.8"/><path d="M57 19.7 L57 17"/>
+            <path d="M52.8 15.5 L50.6 15.5"/><path d="M63.4 15.5 L61.2 15.5"/>
+          </g>
+          <circle cx="57" cy="15.5" r="2.3" fill="var(--accent-bright)"/>
+        </svg>
+        <span class="wordmark">LUMIC</span>
+      </div>
+      <div class="loader-bar"><div id="loaderFill" class="loader-fill"></div></div>
+      <div id="loaderPct" class="loader-pct">0%</div>
+    </div>
+  </div>
+
+  <header class="nav">
+    <div class="nav-brand">
+      <svg class="mark" viewBox="0 0 72 28" aria-hidden="true">
+        <g fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="7" width="24" height="17" rx="6.5"/>
+          <rect x="45" y="7" width="24" height="17" rx="6.5"/>
+          <path d="M27 12 C32 8, 40 8, 45 12"/>
+          <path d="M3 11 L0 9"/><path d="M69 11 L72 9"/>
+        </g>
+        <g stroke="var(--accent-bright)" stroke-width="1.7" stroke-linecap="round">
+          <path d="M57 11.5 L57 8.8"/><path d="M57 19.7 L57 17"/>
+          <path d="M52.8 15.5 L50.6 15.5"/><path d="M63.4 15.5 L61.2 15.5"/>
+        </g>
+        <circle cx="57" cy="15.5" r="2.3" fill="var(--accent-bright)"/>
+      </svg>
+      <span class="wordmark">LUMIC</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#" data-target="features" data-i18n="nav_features">Features</a>
+      <a href="#" data-target="about" data-i18n="nav_about">About</a>
+      <a href="#" data-target="order" data-i18n="nav_order">Order</a>
+    </nav>
+    <div class="lang-switch" id="langSwitch" role="group" aria-label="Language">
+      <button data-lang="he" class="active">HE</button>
+      <button data-lang="en">EN</button>
+      <button data-lang="ru">RU</button>
+    </div>
+  </header>
+
+  <!-- Frame-on-scroll hero — feature captions run OVER the clip as it scrubs -->
+  <section id="scrollVideo" class="scroll-video">
+    <div class="sticky-stage">
+      <canvas id="frameCanvas"></canvas>
+      <div class="hero-overlay">
+        <h1 class="hero-title">LUMIC</h1>
+        <p class="hero-name" data-i18n="tagline">Innovating connectivity. Empowering life.</p>
+        <p class="hero-sub" data-i18n="hero_sub">SCROLL TO DISCOVER</p>
+      </div>
+      <!-- Feature captions, synced to the video scrub (appear one after another) -->
+      <div class="hero-captions" id="heroCaptions">
+        <div class="hero-caption">
+          <span class="hero-caption-num">01</span>
+          <h3 class="hero-caption-name" data-i18n="f1">Hands-free calls</h3>
+          <p class="hero-caption-desc" data-i18n="f1_d">Answer your phone without reaching for it.</p>
+        </div>
+        <div class="hero-caption">
+          <span class="hero-caption-num">02</span>
+          <h3 class="hero-caption-name" data-i18n="f2">Music anywhere</h3>
+          <p class="hero-caption-desc" data-i18n="f2_d">Built-in speakers, no earbuds.</p>
+        </div>
+        <div class="hero-caption">
+          <span class="hero-caption-num">03</span>
+          <h3 class="hero-caption-name" data-i18n="f3">Voice AI assistant</h3>
+          <p class="hero-caption-desc" data-i18n="f3_d">Ask, navigate and translate by voice.</p>
+        </div>
+        <div class="hero-caption">
+          <span class="hero-caption-num">04</span>
+          <h3 class="hero-caption-name" data-i18n="f4">UV-protected lenses</h3>
+          <p class="hero-caption-desc" data-i18n="f4_d">Sharp view, eyes protected all day.</p>
+        </div>
+      </div>
+      <div class="scroll-hint"><span></span></div>
+    </div>
+  </section>
+
+  <!-- After the clip: last frame stays as background, About/Order pop in -->
+  <main class="content">
+    <section class="reveal-scroll" id="reveal">
+      <div class="reveal-stage">
+
+        <div class="slide" data-slide="about">
+          <p class="eyebrow" data-i18n="about_eyebrow">01 — About</p>
+          <h2 class="slide-title" data-i18n="about_title">Matte-black frame. Smart at heart.</h2>
+          <p class="slide-desc" data-i18n="about_lede">A sentence or two about LUMIC.</p>
+        </div>
+
+        <div class="slide" data-slide="order">
+          <p class="eyebrow" data-i18n="order_eyebrow">02 — Order</p>
+          <h2 class="slide-title" data-i18n="order_title">Ready to wear the future?</h2>
+          <div class="contact-details">
+            <div class="detail">
+              <span class="detail-label" data-i18n="label_price">Price</span>
+              <span class="detail-value" data-i18n="value_price">₪499</span>
+            </div>
+            <div class="detail">
+              <span class="detail-label" data-i18n="label_ship">Shipping</span>
+              <span class="detail-value" data-i18n="value_ship">To your door, nationwide</span>
+            </div>
+            <div class="detail">
+              <span class="detail-label" data-i18n="label_wa">WhatsApp</span>
+              <a class="detail-value" id="waPhone" href="https://wa.me/972535422650" dir="ltr">053-542-2650</a>
+            </div>
+          </div>
+          <a class="cta" id="waCta" href="https://wa.me/972535422650" target="_blank" rel="noopener" data-i18n="order_cta">Order on WhatsApp</a>
+        </div>
+
+        <div class="reveal-dots" id="revealDots" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>© <span id="year"></span> LUMIC</span>
+      <span data-i18n="footer_note">LUMIC · AI Smart Glasses</span>
+    </footer>
+  </main>
+
+  <script src="i18n.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

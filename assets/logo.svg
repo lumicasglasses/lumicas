@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 28" role="img" aria-label="LUMIC glasses mark">
+  <g fill="none" stroke="#1b1916" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+    <!-- left lens -->
+    <rect x="3" y="7" width="24" height="17" rx="6.5"/>
+    <!-- right lens -->
+    <rect x="45" y="7" width="24" height="17" rx="6.5"/>
+    <!-- bridge -->
+    <path d="M27 12 C32 8, 40 8, 45 12"/>
+    <!-- temple hints -->
+    <path d="M3 11 L0 9"/>
+    <path d="M69 11 L72 9"/>
+  </g>
+  <!-- AI / light spark in the right lens (copper) -->
+  <g stroke="#b5673a" stroke-width="1.7" stroke-linecap="round">
+    <path d="M57 11.5 L57 8.8"/>
+    <path d="M57 19.7 L57 17"/>
+    <path d="M52.8 15.5 L50.6 15.5"/>
+    <path d="M63.4 15.5 L61.2 15.5"/>
+  </g>
+  <circle cx="57" cy="15.5" r="2.3" fill="#b5673a"/>
+</svg>
