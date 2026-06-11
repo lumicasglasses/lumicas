@@ -28,7 +28,7 @@ window.LUMIC_I18N = {
     label_wa: "וואטסאפ",   value_wa: "053-542-2650",
     order_cta: "הזמנה בוואטסאפ",
     footer_note: "LUMIC · משקפי AI חכמים",
-    credit: "עיצוב ופיתוח · AS",
+    credit: "AS",
   },
   en: {
     dir: "ltr", label: "English",
@@ -54,7 +54,7 @@ window.LUMIC_I18N = {
     label_wa: "WhatsApp",     value_wa: "053-542-2650",
     order_cta: "Order on WhatsApp",
     footer_note: "LUMIC · AI Smart Glasses",
-    credit: "Design & build · AS",
+    credit: "AS",
   },
   ru: {
     dir: "ltr", label: "Русский",
@@ -80,6 +80,6 @@ window.LUMIC_I18N = {
     label_wa: "WhatsApp",      value_wa: "053-542-2650",
     order_cta: "Заказать в WhatsApp",
     footer_note: "LUMIC · умные AI-очки",
-    credit: "Дизайн и разработка · AS",
+    credit: "AS",
   },
 };
