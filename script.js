@@ -205,10 +205,51 @@ function setupNav() {
 /* ---------- i18n + WhatsApp pre-fill ---------- */
 function applyWhatsApp(dict) {
   const href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(dict.wa_msg || "")}`;
-  const cta = document.getElementById("waCta");
-  const phone = document.getElementById("waPhone");
-  if (cta) cta.href = href;
-  if (phone) phone.href = href;
+  const direct = document.getElementById("waDirect");
+  if (direct) direct.href = href;
+}
+
+/* ---------- Order form → WhatsApp with the customer's details ---------- */
+function setupOrderForm() {
+  const form = document.getElementById("orderForm");
+  if (!form) return;
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const lang = document.documentElement.lang || "he";
+    const dict = (window.LUMIC_I18N || {})[lang] || {};
+    const first = document.getElementById("ofFirst");
+    const last = document.getElementById("ofLast");
+    const email = document.getElementById("ofEmail");
+    const phone = document.getElementById("ofPhone");
+    const note = document.getElementById("ofNote");
+    const fields = [first, last, email, phone];
+    fields.forEach((x) => x.classList.remove("invalid"));
+
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+    const phoneOk = phone.value.replace(/\D/g, "").length >= 7;
+    let ok = true;
+    if (!first.value.trim()) { first.classList.add("invalid"); ok = false; }
+    if (!last.value.trim()) { last.classList.add("invalid"); ok = false; }
+    if (!emailOk) { email.classList.add("invalid"); ok = false; }
+    if (!phoneOk) { phone.classList.add("invalid"); ok = false; }
+
+    if (!ok) {
+      if (note) { note.textContent = dict.order_invalid || "Please fill in all fields."; note.classList.add("err"); }
+      const bad = fields.find((x) => x.classList.contains("invalid"));
+      if (bad) bad.focus();
+      return;
+    }
+    if (note) { note.classList.remove("err"); note.textContent = dict.order_note || ""; }
+
+    const msg = (dict.wa_tpl || "")
+      .replace("{first}", first.value.trim())
+      .replace("{last}", last.value.trim())
+      .replace("{email}", email.value.trim())
+      .replace("{phone}", phone.value.trim());
+    const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+    const w = window.open(url, "_blank");
+    if (!w) location.href = url;
+  });
 }
 
 function applyLang(lang) {
@@ -221,6 +262,10 @@ function applyLang(lang) {
     if (dict[key] == null) return;
     if (el.tagName === "META") el.setAttribute("content", dict[key]);
     else el.textContent = dict[key];
+  });
+  document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-ph");
+    if (dict[key] != null) el.setAttribute("placeholder", dict[key]);
   });
   applyWhatsApp(dict);
   document.querySelectorAll("#langSwitch button").forEach((b) => {
@@ -257,6 +302,7 @@ setupLang();
 resizeCanvas();
 setupReveal();
 setupNav();
+setupOrderForm();
 fadeHero();
 updateHeroCaptions();
 preload();

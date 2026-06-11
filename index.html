@@ -112,24 +112,21 @@
           <p class="slide-desc" data-i18n="about_lede">A sentence or two about LUMIC.</p>
         </div>
 
-        <div class="slide" data-slide="order">
+        <div class="slide slide--order" data-slide="order">
           <p class="eyebrow" data-i18n="order_eyebrow">02 — Order</p>
           <h2 class="slide-title" data-i18n="order_title">Ready to wear the future?</h2>
-          <div class="contact-details">
-            <div class="detail">
-              <span class="detail-label" data-i18n="label_price">Price</span>
-              <span class="detail-value" data-i18n="value_price">₪499</span>
+          <p class="order-meta"><span class="om-price" data-i18n="value_price">₪499</span><span class="om-dot">·</span><span data-i18n="value_ship">To your door, nationwide</span></p>
+          <form id="orderForm" class="order-form" novalidate>
+            <div class="of-row">
+              <input class="of-input" id="ofFirst" type="text" autocomplete="given-name" data-i18n-ph="ph_first" placeholder="First name" required />
+              <input class="of-input" id="ofLast" type="text" autocomplete="family-name" data-i18n-ph="ph_last" placeholder="Last name" required />
             </div>
-            <div class="detail">
-              <span class="detail-label" data-i18n="label_ship">Shipping</span>
-              <span class="detail-value" data-i18n="value_ship">To your door, nationwide</span>
-            </div>
-            <div class="detail">
-              <span class="detail-label" data-i18n="label_wa">WhatsApp</span>
-              <a class="detail-value" id="waPhone" href="https://wa.me/972535422650" dir="ltr">053-542-2650</a>
-            </div>
-          </div>
-          <a class="cta" id="waCta" href="https://wa.me/972535422650" target="_blank" rel="noopener" data-i18n="order_cta">Order on WhatsApp</a>
+            <input class="of-input" id="ofEmail" type="email" dir="ltr" autocomplete="email" data-i18n-ph="ph_email" placeholder="Email" required />
+            <input class="of-input" id="ofPhone" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" data-i18n-ph="ph_phone" placeholder="Phone" required />
+            <button type="submit" class="cta of-submit" data-i18n="order_cta">Send order on WhatsApp</button>
+          </form>
+          <p class="of-note" id="ofNote" data-i18n="order_note">We'll reply on WhatsApp.</p>
+          <a class="of-direct" id="waDirect" href="https://wa.me/972535422650" target="_blank" rel="noopener" data-i18n="order_direct">or message us directly on WhatsApp</a>
         </div>
 
         <div class="reveal-dots" id="revealDots" aria-hidden="true"></div>
