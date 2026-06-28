@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<!-- LUMIC — AI Smart Glasses. Scroll-video landing page. Default lang: Hebrew (RTL). -->
+<!-- LUMICAS - AI Smart Glasses. Cinematic dark scroll-video landing page. Default lang: Hebrew (RTL). -->
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-i18n="meta_title">LUMIC — משקפי AI חכמים</title>
+  <title data-i18n="meta_title">LUMICAS</title>
   <meta name="description" content="" data-i18n="meta_desc" />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Heebo:wght@300;400;500;700&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=18" />
 </head>
 <body>
   <div id="loader" class="loader">
@@ -29,14 +29,14 @@
           </g>
           <circle cx="57" cy="15.5" r="2.3" fill="var(--accent-bright)"/>
         </svg>
-        <span class="wordmark">LUMIC</span>
+        <span class="wordmark">LUMICAS</span>
       </div>
       <div class="loader-bar"><div id="loaderFill" class="loader-fill"></div></div>
       <div id="loaderPct" class="loader-pct">0%</div>
     </div>
   </div>
 
-  <header class="nav">
+  <header class="nav" id="nav">
     <div class="nav-brand">
       <svg class="mark" viewBox="0 0 72 28" aria-hidden="true">
         <g fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
@@ -51,31 +51,54 @@
         </g>
         <circle cx="57" cy="15.5" r="2.3" fill="var(--accent-bright)"/>
       </svg>
-      <span class="wordmark">LUMIC</span>
+      <span class="wordmark">LUMICAS</span>
     </div>
-    <nav class="nav-links">
-      <a href="#" data-target="features" data-i18n="nav_features">Features</a>
-      <a href="#" data-target="about" data-i18n="nav_about">About</a>
-      <a href="#" data-target="order" data-i18n="nav_order">Order</a>
-    </nav>
-    <div class="lang-switch" id="langSwitch" role="group" aria-label="Language">
-      <button data-lang="he" class="active">HE</button>
-      <button data-lang="en">EN</button>
-      <button data-lang="ru">RU</button>
+    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navPanel" aria-label="תפריט"><span></span><span></span><span></span></button>
+    <div class="nav-panel" id="navPanel">
+      <nav class="nav-links">
+        <a href="#" data-target="features" data-i18n="nav_features">Features</a>
+        <a href="#" data-target="capabilities" data-i18n="nav_about">About</a>
+        <a href="#" data-target="order" data-i18n="nav_order">Order</a>
+      </nav>
+      <div class="lang-switch" id="langSwitch" role="group" aria-label="Language">
+        <button data-lang="he" class="active">HE</button>
+        <button data-lang="en">EN</button>
+        <button data-lang="ru">RU</button>
+      </div>
     </div>
   </header>
+  <div class="nav-backdrop" id="navBackdrop" hidden></div>
 
-  <!-- Frame-on-scroll hero — feature captions run OVER the clip as it scrubs -->
+  <!-- Drifting aurora atmosphere (behind everything) -->
+  <div class="atmos" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <!-- Global overlays: scroll progress, film grain, cursor glow -->
+  <div class="scroll-progress" aria-hidden="true"><i id="scrollBar"></i></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+  <!-- Frame-on-scroll hero - feature captions run OVER the clip as it scrubs -->
   <section id="scrollVideo" class="scroll-video">
+    <canvas id="frameCanvas" role="img" aria-label="LUMICAS AI smart glasses"></canvas>
+    <div class="hero-grade tint"></div>
+    <div class="hero-grade glow"></div>
+    <div class="hero-grade vignette"></div>
+    <div class="hero-grade scrim"></div>
     <div class="sticky-stage">
-      <canvas id="frameCanvas"></canvas>
       <div class="hero-overlay">
-        <h1 class="hero-title">LUMIC</h1>
+        <h1 class="hero-title shimmer">LUMICAS</h1>
         <p class="hero-name" data-i18n="tagline">Innovating connectivity. Empowering life.</p>
-        <p class="hero-sub" data-i18n="hero_sub">SCROLL TO DISCOVER</p>
+        <p class="hero-rating"><span class="stars" aria-hidden="true">★★★★★</span><span class="hero-rating-txt" data-i18n="rating_text">4.8 / 5 · 2,400+ customers</span></p>
+        <p class="hero-sub" data-i18n="hero_sub">Scroll to discover</p>
       </div>
-      <!-- Feature captions, synced to the video scrub (appear one after another) -->
-      <div class="hero-captions" id="heroCaptions">
+      <!-- floating capability chips around the product (fade with the hero) -->
+      <div class="hero-chips" id="heroChips" aria-hidden="true">
+        <span class="chip chip-tl" data-i18n="f1">Hands-free calls</span>
+        <span class="chip chip-tr" data-i18n="f3">Voice AI assistant</span>
+        <span class="chip chip-bl" data-i18n="f2">Music anywhere</span>
+        <span class="chip chip-br" data-i18n="f5">All-day battery</span>
+      </div>
+      <div class="hero-captions" id="heroCaptions" aria-hidden="true">
         <div class="hero-caption">
           <span class="hero-caption-num">01</span>
           <h3 class="hero-caption-name" data-i18n="f1">Hands-free calls</h3>
@@ -101,45 +124,258 @@
     </div>
   </section>
 
-  <!-- After the clip: last frame stays as background, About/Order pop in -->
   <main class="content">
-    <section class="reveal-scroll" id="reveal">
-      <div class="reveal-stage">
 
-        <div class="slide" data-slide="about">
-          <p class="eyebrow" data-i18n="about_eyebrow">01 — About</p>
-          <h2 class="slide-title" data-i18n="about_title">Matte-black frame. Smart at heart.</h2>
-          <p class="slide-desc" data-i18n="about_lede">A sentence or two about LUMIC.</p>
+    <!-- Statement -->
+    <section class="section statement" id="statement">
+      <p class="eyebrow reveal" data-i18n="statement_eyebrow">The idea</p>
+      <h2 class="statement-title reveal d1" data-split-block data-i18n-html="statement_title">Smart <span class="hl">sight</span>. Without taking your <span class="hl">eyes</span> off the world.</h2>
+      <p class="statement-desc reveal d2" data-i18n="statement_desc">LUMICAS puts calls, music and a voice assistant in a clean matte-black frame - so technology stays out of your hands and the moment stays in front of you.</p>
+    </section>
+
+    <!-- How it works -->
+    <section class="section hiw" id="how">
+      <div class="cap-head">
+        <span class="eyebrow reveal" data-i18n="hiw_eyebrow">How it works</span>
+        <h2 class="cap-title reveal d1" data-split data-i18n="hiw_title">Three steps. That's it.</h2>
+      </div>
+      <div class="hiw-steps">
+        <div class="hiw-step reveal pop">
+          <span class="hiw-num">01</span>
+          <h3 class="hiw-t" data-i18n="step1_t">Wear</h3>
+          <p class="hiw-d" data-i18n="step1_d">Just put them on and go.</p>
         </div>
-
-        <div class="slide slide--order" data-slide="order">
-          <p class="eyebrow" data-i18n="order_eyebrow">02 — Order</p>
-          <h2 class="slide-title" data-i18n="order_title">Ready to wear the future?</h2>
-          <p class="order-meta"><span class="om-price" data-i18n="value_price">₪499</span><span class="om-dot">·</span><span data-i18n="value_ship">To your door, nationwide</span></p>
-          <form id="orderForm" class="order-form" novalidate>
-            <div class="of-row">
-              <input class="of-input" id="ofFirst" type="text" autocomplete="given-name" data-i18n-ph="ph_first" placeholder="First name" required />
-              <input class="of-input" id="ofLast" type="text" autocomplete="family-name" data-i18n-ph="ph_last" placeholder="Last name" required />
-            </div>
-            <input class="of-input" id="ofEmail" type="email" dir="ltr" autocomplete="email" data-i18n-ph="ph_email" placeholder="Email" required />
-            <input class="of-input" id="ofPhone" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" data-i18n-ph="ph_phone" placeholder="Phone" required />
-            <button type="submit" class="cta of-submit" data-i18n="order_cta">Send order on WhatsApp</button>
-          </form>
-          <p class="of-note" id="ofNote" data-i18n="order_note">We'll reply on WhatsApp.</p>
-          <a class="of-direct" id="waDirect" href="https://wa.me/972535422650" target="_blank" rel="noopener" data-i18n="order_direct">or message us directly on WhatsApp</a>
+        <div class="hiw-step reveal pop d1">
+          <span class="hiw-num">02</span>
+          <h3 class="hiw-t" data-i18n="step2_t">Speak</h3>
+          <p class="hiw-d" data-i18n="step2_d">Say a command, get an answer.</p>
         </div>
-
-        <div class="reveal-dots" id="revealDots" aria-hidden="true"></div>
+        <div class="hiw-step reveal pop d2">
+          <span class="hiw-num">03</span>
+          <h3 class="hiw-t" data-i18n="step3_t">Live</h3>
+          <p class="hiw-d" data-i18n="step3_d">Your phone stays in your pocket.</p>
+        </div>
       </div>
     </section>
 
+    <!-- Capabilities grid -->
+    <section class="section cap" id="capabilities">
+      <div class="cap-head">
+        <span class="eyebrow reveal" data-i18n="cap_eyebrow">What's inside</span>
+        <h2 class="cap-title reveal d1" data-split data-i18n="cap_title">Everything, in one frame</h2>
+      </div>
+      <div class="cap-grid">
+        <article class="cap-card reveal">
+          <span class="cap-num">01</span>
+          <div class="cap-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <h3 class="cap-name" data-i18n="f1">Hands-free calls</h3>
+          <p class="cap-desc" data-i18n="f1_d">Answer your phone without reaching for it.</p>
+        </article>
+        <article class="cap-card reveal d1">
+          <span class="cap-num">02</span>
+          <div class="cap-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+          <h3 class="cap-name" data-i18n="f2">Music anywhere</h3>
+          <p class="cap-desc" data-i18n="f2_d">Built-in speakers, no earbuds.</p>
+        </article>
+        <article class="cap-card reveal d2">
+          <span class="cap-num">03</span>
+          <div class="cap-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg></div>
+          <h3 class="cap-name" data-i18n="f3">Voice AI assistant</h3>
+          <p class="cap-desc" data-i18n="f3_d">Ask, navigate and translate by voice.</p>
+        </article>
+        <article class="cap-card reveal">
+          <span class="cap-num">04</span>
+          <div class="cap-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.9" y1="4.9" x2="7" y2="7"/><line x1="17" y1="17" x2="19.1" y2="19.1"/><line x1="4.9" y1="19.1" x2="7" y2="17"/><line x1="17" y1="7" x2="19.1" y2="4.9"/></svg></div>
+          <h3 class="cap-name" data-i18n="f4">UV-protected lenses</h3>
+          <p class="cap-desc" data-i18n="f4_d">Sharp view, eyes protected all day.</p>
+        </article>
+        <article class="cap-card reveal d1">
+          <span class="cap-num">05</span>
+          <div class="cap-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="18" height="12" rx="2"/><line x1="23" y1="11" x2="23" y2="13"/><line x1="5" y1="10" x2="5" y2="14"/><line x1="9" y1="10" x2="9" y2="14"/></svg></div>
+          <h3 class="cap-name" data-i18n="f5">All-day battery</h3>
+          <p class="cap-desc" data-i18n="f5_d">Up to 12 hours, charged in the case.</p>
+        </article>
+        <article class="cap-card reveal d2">
+          <span class="cap-num">06</span>
+          <div class="cap-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 4.5v11L12 22 3 17.5v-11z"/><path d="M3 6.5 12 11l9-4.5M12 11v11"/></svg></div>
+          <h3 class="cap-name" data-i18n="f6">Featherlight design</h3>
+          <p class="cap-desc" data-i18n="f6_d">A matte-black frame that disappears on your face.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Marquee keyword ribbon -->
+    <section class="marquee" aria-hidden="true">
+      <div class="marquee-track" id="marqueeTrack"></div>
+    </section>
+
+    <!-- Feature row 1 -->
+    <section class="section feature" id="exp1">
+      <div class="feature-copy">
+        <span class="eyebrow reveal" data-i18n="exp1_eyebrow">Voice</span>
+        <h2 class="feature-title reveal d1" data-split data-i18n="exp1_title">Every command, by voice.</h2>
+        <p class="feature-desc reveal d2" data-i18n="exp1_desc">Call, navigate, translate and play - just say the word. The built-in AI keeps your hands and your phone where they belong: away.</p>
+      </div>
+      <div class="feature-media reveal d1">
+        <video src="media/feature1.mp4?v=4" poster="media/feature1-poster.jpg?v=4" width="768" height="576" muted loop playsinline preload="auto" aria-hidden="true"></video>
+      </div>
+    </section>
+
+    <!-- Feature row 2 -->
+    <section class="section feature flip" id="exp2">
+      <div class="feature-copy">
+        <span class="eyebrow reveal" data-i18n="exp2_eyebrow">Design</span>
+        <h2 class="feature-title reveal d1" data-split data-i18n="exp2_title">Designed to be seen. Built to work.</h2>
+        <p class="feature-desc reveal d2" data-i18n="exp2_desc">A clean matte-black frame with the tech hidden inside. From across the room it's a great pair of glasses - up close, it's everything.</p>
+      </div>
+      <div class="feature-media reveal d1">
+        <video src="media/feature2.mp4?v=3" poster="media/feature2-poster.jpg?v=3" width="768" height="576" muted loop playsinline preload="auto" aria-hidden="true"></video>
+      </div>
+    </section>
+
+    <!-- Pull quote -->
+    <section class="section pullquote" aria-label="quote">
+      <h2 class="quote-text reveal pop" data-i18n="quote_text">Your phone stays in your pocket. The moment stays in front of you.</h2>
+    </section>
+
+    <!-- WebGL iridescent showpiece -->
+    <section class="showcase" id="showcase">
+      <canvas id="glCanvas" aria-hidden="true"></canvas>
+      <div class="showcase-copy">
+        <span class="eyebrow reveal" data-i18n="showcase_eyebrow">The experience</span>
+        <h2 class="showcase-title reveal d1" data-split data-i18n="showcase_title">See differently.</h2>
+        <p class="showcase-sub reveal d2" data-i18n="showcase_sub">Technology that melts into the glass. Move your mouse.</p>
+      </div>
+    </section>
+
+    <!-- Spec strip -->
+    <section class="specs" id="specs" aria-label="specs">
+      <div class="spec reveal"><div class="spec-v"><span class="num" data-to="6">6</span><span class="u" data-i18n="spec1_u">h</span></div><div class="spec-l" data-i18n="spec1_l">Battery</div></div>
+      <div class="spec reveal d1"><div class="spec-v"><span class="num" data-to="32">32</span><span class="u" data-i18n="spec2_u">g</span></div><div class="spec-l" data-i18n="spec2_l">Weight</div></div>
+      <div class="spec reveal d2"><div class="spec-v">UV</div><div class="spec-l" data-i18n="spec3_l">Protection</div></div>
+    </section>
+
+    <!-- What's in the box -->
+    <section class="section box" id="box">
+      <div class="cap-head">
+        <span class="eyebrow reveal" data-i18n="box_eyebrow">In the box</span>
+        <h2 class="cap-title reveal d1" data-split data-i18n="box_title">What's in the box</h2>
+      </div>
+      <div class="box-grid">
+        <div class="box-item reveal pop">
+          <div class="box-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="14" r="4"/><circle cx="18" cy="14" r="4"/><path d="M10 13c.7-.6 3.3-.6 4 0"/><path d="M2 12l1.5-2M22 12l-1.5-2"/></svg></div>
+          <span data-i18n="box1">LUMICAS glasses</span>
+        </div>
+        <div class="box-item reveal pop d1">
+          <div class="box-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h9a3 3 0 0 0 3-3V7"/><rect x="14" y="3" width="5" height="4" rx="1"/><circle cx="4" cy="12" r="2"/></svg></div>
+          <span data-i18n="box3">USB-C cable</span>
+        </div>
+        <div class="box-item reveal pop d2">
+          <div class="box-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+          <span data-i18n="box4">Microfiber cloth</span>
+        </div>
+        <div class="box-item reveal pop d3">
+          <div class="box-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="12" r="5"/><circle cx="16" cy="12" r="5"/></svg></div>
+          <span data-i18n="box5">Spare clear lenses</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust band -->
+    <section class="trust" aria-label="trust">
+      <div class="trust-item reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span data-i18n="trust_ship">Free shipping</span>
+      </div>
+      <div class="trust-item reveal d1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>
+        <span data-i18n="trust_returns">7-day returns</span>
+      </div>
+      <div class="trust-item reveal d2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span data-i18n="trust_count">2,400+ customers</span>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section faq" id="faq">
+      <div class="cap-head">
+        <span class="eyebrow reveal" data-i18n="faq_eyebrow">FAQ</span>
+        <h2 class="cap-title reveal d1" data-split data-i18n="faq_title">Everything you wanted to know</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item reveal">
+          <summary><span data-i18n="faq1_q">How do I answer a call?</span><i class="faq-mark" aria-hidden="true"></i></summary>
+          <p data-i18n="faq1_a"></p>
+        </details>
+        <details class="faq-item reveal d1">
+          <summary><span data-i18n="faq2_q">Prescription lenses?</span><i class="faq-mark" aria-hidden="true"></i></summary>
+          <p data-i18n="faq2_a"></p>
+        </details>
+        <details class="faq-item reveal d2">
+          <summary><span data-i18n="faq3_q">Battery life?</span><i class="faq-mark" aria-hidden="true"></i></summary>
+          <p data-i18n="faq3_a"></p>
+        </details>
+        <details class="faq-item reveal d3">
+          <summary><span data-i18n="faq4_q">Shipping & warranty?</span><i class="faq-mark" aria-hidden="true"></i></summary>
+          <p data-i18n="faq4_a"></p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Order -->
+    <section class="section order" id="order">
+      <p class="eyebrow reveal" data-i18n="order_eyebrow">02 - Order</p>
+      <h2 class="order-title reveal d1" data-split data-i18n="order_title">Ready to wear the future?</h2>
+      <p class="rating reveal d1" aria-label="4.9 out of 5"><span class="stars" aria-hidden="true">★★★★★</span><span class="rating-txt" data-i18n="rating_text">4.8 / 5 · 2,400+ customers</span></p>
+      <p class="order-meta reveal d2"><span class="om-price" data-i18n="value_price">₪499</span><span class="om-dot">·</span><span data-i18n="value_ship">To your door, nationwide</span></p>
+      <form id="orderForm" class="order-form reveal d2" novalidate>
+        <div class="of-row">
+          <input class="of-input" id="ofFirst" type="text" autocomplete="given-name" data-i18n-ph="ph_first" placeholder="First name" required />
+          <input class="of-input" id="ofLast" type="text" autocomplete="family-name" data-i18n-ph="ph_last" placeholder="Last name" required />
+        </div>
+        <input class="of-input" id="ofEmail" type="email" dir="ltr" autocomplete="email" data-i18n-ph="ph_email" placeholder="Email" required />
+        <input class="of-input" id="ofPhone" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" data-i18n-ph="ph_phone" placeholder="Phone" required />
+        <button type="submit" class="cta of-submit" data-magnetic data-i18n="order_cta">Send order on WhatsApp</button>
+      </form>
+      <p class="of-note" id="ofNote" data-i18n="order_note">We'll reply on WhatsApp.</p>
+      <a class="of-direct" id="waDirect" href="https://wa.me/972535422650" target="_blank" rel="noopener" data-i18n="order_direct">or message us directly on WhatsApp</a>
+    </section>
+
     <footer class="footer">
-      <span class="foot-copy">© <span id="year"></span> LUMIC · <span class="credit" data-i18n="credit">AS</span></span>
-      <span class="foot-name" data-i18n="footer_note">LUMIC · AI Smart Glasses</span>
+      <div class="foot-brand">
+        <svg class="mark" viewBox="0 0 72 28" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="7" width="24" height="17" rx="6.5"/>
+            <rect x="45" y="7" width="24" height="17" rx="6.5"/>
+            <path d="M27 12 C32 8, 40 8, 45 12"/>
+            <path d="M3 11 L0 9"/><path d="M69 11 L72 9"/>
+          </g>
+          <g stroke="var(--accent-bright)" stroke-width="1.7" stroke-linecap="round">
+            <path d="M57 11.5 L57 8.8"/><path d="M57 19.7 L57 17"/>
+            <path d="M52.8 15.5 L50.6 15.5"/><path d="M63.4 15.5 L61.2 15.5"/>
+          </g>
+          <circle cx="57" cy="15.5" r="2.3" fill="var(--accent-bright)"/>
+        </svg>
+        <span class="wordmark">LUMICAS</span>
+      </div>
+      <div class="foot-contact">
+        <a id="waFoot" href="https://wa.me/972535422650" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.16c-.25.69-1.45 1.32-1.99 1.36-.53.05-1.02.24-3.45-.72-2.9-1.14-4.74-4.1-4.88-4.29-.14-.19-1.17-1.56-1.17-2.97 0-1.42.74-2.11 1-2.4.25-.29.55-.36.73-.36l.53.01c.17.01.4-.06.62.48.25.6.86 2.07.94 2.22.07.14.12.31.02.5-.1.19-.15.31-.29.48-.14.16-.3.37-.43.49-.14.14-.29.29-.12.58.17.29.74 1.22 1.59 1.98 1.09.97 2.01 1.27 2.3 1.42.29.14.46.12.62-.07.17-.19.72-.84.91-1.13.19-.29.38-.24.64-.14.26.09 1.66.78 1.94.93.29.14.48.21.55.33.07.12.07.69-.18 1.38z"/></svg>
+          <span data-i18n="value_wa">053-542-2650</span>
+        </a>
+      </div>
+      <div class="foot-meta">
+        <span>© <span id="year"></span> LUMICAS</span>
+        <span>·</span>
+        <span data-i18n="footer_note">AI Smart Glasses</span>
+        <span>·</span>
+        <span class="credit" data-i18n="credit">AS</span>
+      </div>
     </footer>
   </main>
 
-  <script src="i18n.js"></script>
-  <script src="script.js"></script>
+  <script src="i18n.js?v=24"></script>
+  <script src="script.js?v=10"></script>
 </body>
 </html>
