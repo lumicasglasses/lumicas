@@ -1183,3 +1183,204 @@ html.reveal-on .reveal.pop.in { transform: none; filter: none; }
 }
 @media (max-width: 700px) { .sh-side { display: none; } }
 [dir="rtl"] .sh-bl, [dir="rtl"] .sh-br { letter-spacing: .08em; }
+
+/* ====================================================================
+   LIGHT PREMIUM THEME  —  full reskin toward the warm, clean, rounded
+   food-brand reference (Kayla Flavor / @lorenzobuilds): cream backgrounds,
+   warm orange accent, generous radii, soft shadows, lots of air. This is
+   the FINAL layer; it overrides every dark/technical pass above.
+   ==================================================================== */
+
+/* 1 — Warm light palette (flips everything var-based in one move) */
+:root {
+  --bg: #f6f2ec;            --bg-2: #fffdf9;
+  --surface: #ffffff;       --surface-2: #fbf7f1;
+  --ink: #211d18;           --ink-soft: #6e675e;      --muted: #a39b90;
+  --accent: #ef6c2e;        --accent-bright: #ff9559;  --accent-deep: #d2551c;
+  --accent-2: #e2902f;      --accent-2-bright: #f4a948; --accent-2-deep: #c4761c;
+  --on-accent-2: #ffffff;   --on-accent: #ffffff;
+  --glow: rgba(239,108,46,.28);  --glow-2: rgba(226,144,47,.26);
+  --line: rgba(33,29,24,.12);    --line-soft: rgba(33,29,24,.055);
+  --canvas-bg: #f6f2ec;
+}
+body { background: var(--bg); color: var(--ink); }
+
+/* 2 — Strip the dark technical chrome — the reference is clean & minimal */
+.tech-frame, .blueprint, .site-hud, .hero-hud, .atmos, .cursor-glow { display: none !important; }
+.grain { opacity: .018; }
+
+/* 3 — Hero → light: drop the dark grades, show the bright product plate */
+.hero-grade, .portal { display: none !important; }
+#frameCanvas { filter: none; background: var(--canvas-bg); }
+.hero-title.shimmer {
+  background: none; -webkit-text-fill-color: var(--ink); color: var(--ink);
+  animation: none; text-shadow: none;
+}
+.hero-name { color: var(--ink-soft); text-shadow: none; }
+.hero-sub { color: var(--accent); text-shadow: none; }
+.hero-rating .hero-rating-txt { color: var(--ink-soft); text-shadow: none; }
+.hero-rating .stars, .rating .stars { color: var(--accent); text-shadow: none; }
+.hero-caption-name { color: var(--ink); text-shadow: none; }
+.hero-caption-desc { color: var(--ink-soft); text-shadow: none; }
+.hero-caption-num { color: var(--accent); }
+.scroll-hint { background: rgba(33,29,24,.16); }
+.scroll-hint span { background: var(--accent); }
+.hero-chips .chip {
+  background: rgba(255,255,255,.92); color: var(--ink); border: 1px solid var(--line);
+  box-shadow: 0 10px 28px -14px rgba(60,40,20,.25); backdrop-filter: none;
+}
+.hero-badge { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+.hero-explore { background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: 999px; }
+.hero-explore:hover { background: var(--surface-2); border-color: var(--accent); }
+
+/* 4 — Nav → dark text on light, order-style accents */
+.nav .wordmark, .nav-brand .wordmark { color: var(--ink); }
+.nav-links a { color: var(--ink); }
+.nav-links a:hover, .nav-links a.active { color: var(--accent); }
+.nav.scrolled {
+  background: rgba(255,253,249,.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom-color: var(--line);
+}
+.nav-toggle span { background: var(--ink); }
+.lang-switch button { color: var(--ink); }
+.lang-switch button.active { border-bottom-color: var(--accent); }
+.nav-panel { background: var(--bg-2); }
+
+/* 5 — Section backgrounds → cream / white with a warm whisper of colour */
+.statement {
+  background: radial-gradient(72% 52% at 82% 4%, rgba(239,108,46,.06), transparent 60%), var(--bg);
+  border-top: 0;
+}
+.cap { background: var(--bg-2); }
+.order { background: linear-gradient(180deg, #fff4ec 0%, var(--bg) 55%); }
+.specs { background-color: var(--line); }
+.spec { background: var(--bg-2); }
+.trust { background: var(--surface-2); }
+.marquee { background: var(--bg-2); border-block-color: var(--line-soft); }
+.marquee::before { background: linear-gradient(to right, var(--bg-2), transparent); }
+.marquee::after  { background: linear-gradient(to left,  var(--bg-2), transparent); }
+
+/* 6 — Section headers → centered & clean again (drop the technical rule/index) */
+.cap-head {
+  text-align: center; border-top: 0; padding-top: 0;
+  max-width: 720px; margin: 0 auto clamp(40px, 6vh, 70px);
+}
+.cap-head .cap-title { max-width: none; }
+.cap-head .eyebrow::after { content: ""; }
+
+/* 7 — Eyebrows → clean small warm label (no mono, no "//" marker) */
+.eyebrow {
+  font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
+  font-size: clamp(11px, 1.1vw, 13px); letter-spacing: .2em; color: var(--accent);
+}
+.eyebrow::before { content: ""; }
+.showcase .eyebrow { color: var(--accent); }
+
+/* 8 — Headings → warm near-black */
+.statement-title, .cap-title, .feature-title, .order-title,
+.showcase-title, .quote-text { color: var(--ink); text-shadow: none; }
+.statement-desc, .feature-desc, .cap-desc, .showcase-sub, .order-meta { color: var(--ink-soft); }
+.statement-title .hl { color: var(--accent); }
+.statement-title .hl:nth-of-type(2) { color: var(--accent-2); }
+.quote-text::before { color: var(--accent); }
+
+/* 9 — Cards → white, soft shadow, generous radius (menu-card feel) */
+.cap-card {
+  background: #fff; border: 1px solid var(--line); border-radius: 22px;
+  box-shadow: 0 14px 34px -22px rgba(60,40,20,.32);
+}
+.cap-card:hover {
+  background: #fff; border-color: var(--accent); transform: translateY(-6px);
+  box-shadow: 0 26px 56px -26px rgba(60,40,20,.4);
+}
+.cap-num { color: var(--accent); }
+.cap-card:nth-child(even) .cap-num { color: var(--accent-2); }
+.cap-icon { color: var(--accent); }
+.cap-card:nth-child(even) .cap-icon { color: var(--accent-2); }
+.cap-name { color: var(--ink); }
+.cap-desc { color: var(--ink-soft); }
+.cap-card .glare { display: none; }
+
+.box-item, .faq-item {
+  background: #fff; border: 1px solid var(--line); border-radius: 18px;
+  box-shadow: 0 12px 30px -22px rgba(60,40,20,.28);
+}
+.box-item:hover { background: #fff; border-color: var(--accent); box-shadow: 0 20px 44px -24px rgba(60,40,20,.36); }
+.box-ic { color: var(--accent); }
+.box-item:nth-child(even) .box-ic { color: var(--accent-2); }
+.box-item span { color: var(--ink-soft); }
+.faq-item summary { color: var(--ink); }
+.faq-item[open] { background: #fff; border-color: var(--accent); }
+.faq-item p { color: var(--ink-soft); }
+.faq-mark::before, .faq-mark::after { background: var(--accent); }
+
+/* 10 — Feature media → rounded light image frames */
+.feature-media, #exp2 .feature-media {
+  background: linear-gradient(180deg, #fff, #f1eae1); border: 1px solid var(--line); border-radius: 24px;
+}
+.feature-media::after { background: radial-gradient(85% 85% at 50% 45%, transparent 60%, rgba(60,40,20,.08) 100%); }
+.feature-media video, .feature-media img { filter: none; mix-blend-mode: normal; opacity: 1; }
+
+/* 11 — Spec strip → light cells */
+.spec-v { color: var(--ink); }
+.spec-v .u { color: var(--accent); }
+.spec:nth-child(even) .spec-v .u { color: var(--accent-2); }
+.spec-l { color: var(--muted); font-family: var(--font-display); }
+
+/* 12 — Trust band → warm icons on light */
+.trust-item { color: var(--ink-soft); font-family: var(--font-display); text-transform: none; letter-spacing: .01em; font-size: 14px; }
+.trust-item svg { color: var(--accent); }
+.trust-item:nth-child(even) svg { color: var(--accent-2); }
+
+/* 13 — How-it-works numbers → warm outline */
+.hiw-num { -webkit-text-stroke-color: var(--accent); }
+.hiw-step:nth-child(even) .hiw-num { -webkit-text-stroke-color: var(--accent-2); }
+.hiw-t { color: var(--ink); }
+.hiw-d { color: var(--ink-soft); }
+
+/* 14 — Marquee → clean warm ribbon */
+.marquee-item { font-family: var(--font-display); font-weight: 600; text-transform: none; letter-spacing: .01em; color: var(--ink); }
+.marquee-dot { color: var(--accent); }
+
+/* 15 — Inputs → light, rounded */
+.of-input { background: #fff; border: 1px solid var(--line); color: var(--ink); border-radius: 12px; }
+.of-input::placeholder { color: var(--muted); }
+.of-input:focus { border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px rgba(239,108,46,.16); }
+.of-note { color: var(--muted); }
+.of-direct { color: var(--accent-deep); }
+.of-direct:hover { color: var(--ink); }
+
+/* 16 — CTA → warm orange pill, white label (the reference's "order" button) */
+.cta {
+  font-family: var(--font-display); text-transform: none; letter-spacing: .02em; font-weight: 600;
+  border-radius: 999px; border: 0; color: #fff;
+  background: linear-gradient(180deg, var(--accent-bright), var(--accent-deep));
+  box-shadow: 0 14px 32px -14px var(--glow);
+}
+.cta:hover { filter: brightness(1.04); box-shadow: 0 20px 44px -16px var(--glow); }
+.order-meta .om-price { color: var(--accent-deep); text-shadow: none; }
+
+/* 17 — Showcase → light premium panel (hide the dark WebGL) */
+.showcase {
+  background: linear-gradient(180deg, #fff6ee, #f3ebe2);
+  border-block: 1px solid var(--line);
+}
+.showcase #glCanvas { display: none; }
+.showcase-title { color: var(--ink); text-shadow: none; }
+.showcase-sub { color: var(--ink-soft); text-shadow: none; }
+
+/* 18 — Footer → light */
+.footer { background: var(--bg-2); border-top: 1px solid var(--line); }
+.footer .foot-brand { color: var(--ink); }
+.foot-contact a { color: var(--ink-soft); }
+.foot-contact a:hover { color: var(--accent-deep); }
+.foot-meta { color: var(--muted); }
+.foot-meta .credit { color: var(--accent); }
+
+/* 19 — Loader → light */
+.loader { background: var(--bg); color: var(--ink); }
+.loader-pct { color: var(--ink-soft); }
+.loader-bar { background: var(--line); }
+
+/* 20 — Focus ring → warm */
+:focus-visible { outline-color: var(--accent); }

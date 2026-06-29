@@ -61,7 +61,7 @@ function updateSiteHud() {
 }
 
 /* ---------- Canvas sizing (cover-fit, retina-aware) ---------- */
-const CANVAS_BG = "#0a0d16";
+const CANVAS_BG = "#f6f2ec";
 
 function resizeCanvas() {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
