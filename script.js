@@ -32,6 +32,34 @@ const hudPctEl = document.getElementById("hudPct");
 const hudProgEl = document.getElementById("hudProg");
 const heroPortal = document.getElementById("heroPortal");
 
+/* Persistent site HUD (section index + scroll %, shown after the hero) */
+const siteHud = document.getElementById("siteHud");
+const shIdx = document.getElementById("shIdx");
+const shName = document.getElementById("shName");
+const shPct = document.getElementById("shPct");
+const SITE_SECTIONS = [
+  ["statement", "STATEMENT"], ["how", "PROCESS"], ["capabilities", "FEATURES"],
+  ["exp1", "VOICE"], ["showcase", "EXPERIENCE"], ["specs", "SPECS"],
+  ["box", "IN THE BOX"], ["faq", "FAQ"], ["order", "ORDER"],
+];
+function updateSiteHud() {
+  if (!siteHud) return;
+  const past = window.scrollY > window.innerHeight * 0.95;
+  siteHud.classList.toggle("on", past);
+  if (!past) return;
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = h > 0 ? Math.round((window.scrollY / h) * 100) : 0;
+  if (shPct) shPct.textContent = String(pct).padStart(3, "0");
+  const line = window.innerHeight * 0.4;
+  let idx = 1, name = SITE_SECTIONS[0][1];
+  SITE_SECTIONS.forEach(([id, label], i) => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= line) { idx = i + 1; name = label; }
+  });
+  if (shIdx) shIdx.textContent = String(idx).padStart(2, "0");
+  if (shName) shName.textContent = name;
+}
+
 /* ---------- Canvas sizing (cover-fit, retina-aware) ---------- */
 const CANVAS_BG = "#0a0d16";
 
@@ -127,6 +155,7 @@ function onScroll() {
       updateScrollProgress();
       updateActiveNav();
       updateMobileCta();
+      updateSiteHud();
       maybeCountSpecs();
       ticking = false;
     });
@@ -680,4 +709,5 @@ updateNav();
 updateScrollProgress();
 updateActiveNav();
 updateMobileCta();
+updateSiteHud();
 preload();

@@ -1131,3 +1131,55 @@ html.reveal-on .reveal.pop.in { transform: none; filter: none; }
 @media (prefers-reduced-motion: reduce) {
   .hero-title.shimmer { -webkit-text-fill-color: var(--ink); color: var(--ink); }
 }
+
+/* ====================================================================
+   REDESIGN II  —  structural pass so the page reads as a DIFFERENT site:
+   a blueprint grid behind the whole interface, left-aligned ruled +
+   indexed section headers, and a persistent technical HUD (vertical brand
+   label + live section/scroll readout) framing every screen.
+   ==================================================================== */
+
+/* 1 — Blueprint grid behind the whole interface (faded at the edges) */
+.blueprint {
+  position: fixed; inset: 0; z-index: 58; pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.027) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.027) 1px, transparent 1px);
+  background-size: clamp(64px, 8vw, 116px) clamp(64px, 8vw, 116px);
+  -webkit-mask: radial-gradient(135% 105% at 50% 38%, #000 52%, transparent 100%);
+          mask: radial-gradient(135% 105% at 50% 38%, #000 52%, transparent 100%);
+}
+@media (max-width: 600px) { .blueprint { background-size: 52px 52px; } }
+
+/* 2 — Section headers: left-aligned, top hairline rule, running index number */
+.content { counter-reset: sectn; }
+.cap-head {
+  text-align: start; max-width: 1180px; margin: 0 auto clamp(36px, 6vh, 68px);
+  border-top: 1px solid var(--line); padding-top: 20px;
+}
+.cap-head .eyebrow { display: block; margin-bottom: 14px; }
+.cap-head .eyebrow::after {
+  counter-increment: sectn;
+  content: " — " counter(sectn, decimal-leading-zero);
+  color: var(--ink-soft);
+}
+.cap-head .cap-title { max-width: 20ch; }
+
+/* 3 — Persistent site HUD: vertical brand label + live section / scroll % */
+.site-hud {
+  position: fixed; inset: 0; z-index: 78; pointer-events: none;
+  font-family: var(--font-mono); text-transform: uppercase;
+  letter-spacing: .18em; font-size: 10px; color: var(--ink-soft);
+  opacity: 0; transition: opacity .5s ease;
+}
+.site-hud.on { opacity: 1; }
+.sh { position: absolute; white-space: nowrap; }
+.sh-bl { bottom: 24px; inset-inline-start: 30px; }
+.sh-br { bottom: 24px; inset-inline-end: 30px; }
+.sh-bl i, .sh-br i { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+.sh-side {
+  top: 50%; left: 15px; transform: translate(-50%, -50%) rotate(-90deg);
+  color: var(--muted); letter-spacing: .3em; font-size: 9.5px;
+}
+@media (max-width: 700px) { .sh-side { display: none; } }
+[dir="rtl"] .sh-bl, [dir="rtl"] .sh-br { letter-spacing: .08em; }
