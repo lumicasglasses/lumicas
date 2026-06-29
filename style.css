@@ -983,3 +983,151 @@ html.reveal-on .reveal.pop.in { transform: none; filter: none; }
 @media (prefers-reduced-motion: reduce) {
   html.reveal-on .reveal.pop { transform: none; filter: none; transition: none; }
 }
+
+/* ====================================================================
+   EDITORIAL-TECHNICAL REDESIGN  —  site-wide skin to match the reference
+   video (Awwwards mood): cold near-monochrome charcoal palette, monospace
+   technical labels with "//" markers, hairline panels, sharp corners,
+   dimmed grey fog, framed viewport. Appended as an override layer so the
+   base layout stays intact underneath. Brand blue+orange survive only as
+   restrained accents (markers, numbers, the buy CTA, status dots).
+   ==================================================================== */
+
+/* 1 — Cold, near-monochrome palette (re-declared → later wins) */
+:root {
+  --bg: #070809;            --bg-2: #0a0b0c;
+  --surface: #0d0e10;       --surface-2: #141518;
+  --ink: #edeff2;           --ink-soft: #939aa2;     --muted: #5d636a;
+  --accent: #76aaff;        --accent-bright: #aecdff; --accent-deep: #3f72c6;
+  --accent-2: #ff9a3c;      --accent-2-bright: #ffb066; --accent-2-deep: #d97a1f;
+  --glow: rgba(118,170,255,.22);  --glow-2: rgba(255,154,60,.22);
+  --line: rgba(255,255,255,.13);  --line-soft: rgba(255,255,255,.055);
+  --canvas-bg: #070809;
+}
+
+/* 2 — Framed viewport: thin hairline border + two accent corner ticks */
+.tech-frame {
+  position: fixed; inset: 13px; z-index: 80; pointer-events: none;
+  border: 1px solid rgba(255,255,255,.075);
+}
+.tech-frame::before, .tech-frame::after {
+  content: ""; position: absolute; width: 10px; height: 10px; border: 1.5px solid var(--accent);
+}
+.tech-frame::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.tech-frame::after  { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+@media (max-width: 600px) { .tech-frame { inset: 7px; } }
+
+/* 3 — Sharper corners everywhere (technical, not soft) */
+.cap-card, .box-item, .faq-item, .feature-media, .of-input, .spec { border-radius: 2px; }
+.cta { border-radius: 3px; }
+.hero-badge, .chip, .hero-explore { border-radius: 0; }
+
+/* 4 — Eyebrows → monospace technical labels with a "// " index marker */
+.eyebrow {
+  font-family: var(--font-mono); font-weight: 400;
+  font-size: clamp(10px, 1.05vw, 12px); letter-spacing: .26em;
+  color: var(--ink-soft); text-transform: uppercase;
+}
+.eyebrow::before { content: "// "; color: var(--accent); }
+.showcase .eyebrow { color: rgba(255,255,255,.78); }
+.showcase .eyebrow::before { color: var(--accent-bright); }
+
+/* 5 — Technical type on labels, numbers, nav, ribbons, meta */
+.cap-num, .hero-caption-num, .spec-l, .marquee-item, .trust-item,
+.foot-meta, .foot-contact a, .nav-links a, .hero-name, .hero-sub {
+  font-family: var(--font-mono);
+}
+.nav-links a { text-transform: uppercase; font-size: 11px; letter-spacing: .18em; font-weight: 400; }
+.cap-num { letter-spacing: .2em; font-weight: 400; }
+.hero-name { text-transform: uppercase; letter-spacing: .22em; font-size: clamp(11px, 1.4vw, 14px); font-weight: 400; }
+.hero-sub { letter-spacing: .3em; }
+.trust-item { text-transform: uppercase; letter-spacing: .12em; font-size: 12px; color: var(--ink-soft); }
+.foot-contact a { text-transform: uppercase; letter-spacing: .12em; font-size: 12px; }
+.spec-l { letter-spacing: .2em; }
+
+/* 6 — Headings: tighten, drop the glows (editorial, not neon) */
+.statement-title, .cap-title, .feature-title, .order-title,
+.showcase-title, .quote-text { letter-spacing: -.02em; text-shadow: none; }
+
+/* Hero title: solid cold white wordmark (kills the candy shimmer) */
+.hero-title.shimmer {
+  background: none; -webkit-background-clip: initial; background-clip: initial;
+  -webkit-text-fill-color: var(--ink); color: var(--ink);
+  animation: none; text-shadow: 0 4px 50px rgba(0,0,0,.55);
+}
+
+/* 7 — Cards become bordered technical panels (no fills, no blue bloom) */
+.cap-card {
+  background: rgba(255,255,255,.012); border: 1px solid var(--line);
+  box-shadow: none; min-height: 200px;
+}
+.cap-card::after { display: none; }
+.cap-card:hover {
+  background: var(--surface); border-color: var(--accent);
+  transform: translateY(-4px); box-shadow: none;
+}
+.cap-card:nth-child(even):hover { border-color: var(--accent-2); }
+.box-item, .faq-item { background: rgba(255,255,255,.012); box-shadow: none; }
+.box-item:hover { background: var(--surface); border-color: var(--accent); box-shadow: none; }
+.faq-item[open] { background: var(--surface); border-color: var(--accent); }
+
+/* 8 — Sections: flatten the blue/orange radial blooms to cold charcoal */
+.statement {
+  background: radial-gradient(78% 56% at 82% 6%, rgba(124,150,190,.05), transparent 60%), var(--bg);
+}
+.cap { background: var(--bg-2); }
+.order {
+  background: radial-gradient(90% 60% at 50% 0%, rgba(124,150,190,.05), transparent 60%), var(--bg);
+}
+.specs { background-color: var(--line-soft); }
+.spec { background: var(--bg-2); }
+.trust { background: rgba(255,255,255,.014); }
+.marquee { background: var(--bg); }
+.feature-media, #exp2 .feature-media {
+  background: linear-gradient(180deg, #0d0e10, #070809);
+}
+
+/* 9 — Atmosphere → dim, cold grey fog (no orange aurora) */
+.atmos span { opacity: .15; filter: blur(120px); }
+.atmos span:nth-child(1) { background: radial-gradient(circle, rgba(122,150,195,.5), transparent 70%); }
+.atmos span:nth-child(2) { background: radial-gradient(circle, rgba(150,158,172,.42), transparent 70%); }
+.atmos span:nth-child(3) { background: radial-gradient(circle, rgba(112,142,188,.46), transparent 70%); }
+.cursor-glow { background: radial-gradient(circle, rgba(150,180,222,.08), transparent 70%); }
+.cursor-glow.hot { background: radial-gradient(circle, rgba(255,160,80,.10), rgba(150,180,222,.05) 50%, transparent 72%); }
+
+/* 10 — Showcase: cool the WebGL toward the grey reference landscape */
+.showcase {
+  background: radial-gradient(60% 70% at 38% 30%, rgba(122,150,195,.16), transparent 60%), #06070a;
+}
+.showcase #glCanvas { filter: saturate(.5) brightness(.78) contrast(1.05); }
+.showcase-title { text-shadow: none; }
+
+/* 11 — Marquee → compact technical strip */
+.marquee { padding: 16px 0; }
+.marquee-item {
+  font-weight: 400; text-transform: uppercase; letter-spacing: .18em;
+  font-size: clamp(12px, 1.5vw, 18px); color: var(--ink-soft);
+}
+
+/* 12 — Buy CTA: sharp, monospace, brand orange kept as the action colour */
+.cta {
+  font-family: var(--font-mono); text-transform: uppercase;
+  letter-spacing: .16em; font-weight: 700;
+}
+.hero-explore, .hero-badge, .chip {
+  font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .12em;
+}
+.hero-explore { font-size: 12px; }
+.chip { font-size: 11px; letter-spacing: .08em; }
+
+/* 13 — Marquee dot → technical slash */
+.marquee-dot { color: var(--accent); font-weight: 400; }
+
+/* RTL: tame the wide Latin tracking on the new monospace labels */
+[dir="rtl"] .nav-links a, [dir="rtl"] .marquee-item, [dir="rtl"] .trust-item,
+[dir="rtl"] .foot-contact a, [dir="rtl"] .hero-name, [dir="rtl"] .eyebrow,
+[dir="rtl"] .spec-l { letter-spacing: .06em; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-title.shimmer { -webkit-text-fill-color: var(--ink); color: var(--ink); }
+}
