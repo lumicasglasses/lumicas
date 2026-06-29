@@ -441,6 +441,65 @@ function buildMarquee(dict) {
   track.innerHTML = half + half; // duplicate so the -50% loop is seamless
 }
 
+/* ---------- Paint brush trail that follows the cursor ----------
+ * A full-screen canvas (multiply-blended like ink on paper) draws a thick,
+ * tapering orange brush stroke along the pointer path. Slow moves paint
+ * fatter; the whole trail dissolves each frame so it trails and fades. Desktop
+ * / fine-pointer only; disabled for touch + reduced-motion. */
+function setupBrush() {
+  const c = document.getElementById("brushTrail");
+  if (!c || !hoverFine() || reduceMotion()) return;
+  const x = c.getContext("2d");
+  let w, h, dpr;
+  function size() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = c.width = Math.floor(window.innerWidth * dpr);
+    h = c.height = Math.floor(window.innerHeight * dpr);
+    c.style.width = window.innerWidth + "px";
+    c.style.height = window.innerHeight + "px";
+  }
+  size();
+  window.addEventListener("resize", size);
+
+  const css = getComputedStyle(document.documentElement);
+  const COL = (css.getPropertyValue("--accent").trim() || "#ef6c2e");
+  const CORE = (css.getPropertyValue("--accent-bright").trim() || "#ff9559");
+
+  let px = null, py = null, lx = null, ly = null, lw = 18;
+  window.addEventListener("pointermove", (e) => {
+    px = e.clientX * dpr; py = e.clientY * dpr;
+    if (lx === null) { lx = px; ly = py; }
+  }, { passive: true });
+
+  function frame() {
+    requestAnimationFrame(frame);
+    // dissolve the existing trail slowly so it reads as a bold lingering swoosh
+    x.globalCompositeOperation = "destination-out";
+    x.fillStyle = "rgba(0,0,0,0.045)";
+    x.fillRect(0, 0, w, h);
+    x.globalCompositeOperation = "source-over";
+
+    if (px === null || (px === lx && py === ly)) return;
+    const dist = Math.hypot(px - lx, py - ly);
+    // bold throughout; slow strokes paint even fatter — brush feel
+    const target = Math.max(18 * dpr, Math.min(58 * dpr, (1900 * dpr) / (dist + 42)));
+    lw += (target - lw) * 0.3;
+    const mx = (lx + px) / 2, my = (ly + py) / 2;
+
+    x.lineCap = "round"; x.lineJoin = "round";
+    // soft outer body
+    x.strokeStyle = COL; x.lineWidth = lw;
+    x.shadowColor = COL; x.shadowBlur = 10 * dpr;
+    x.beginPath(); x.moveTo(lx, ly); x.quadraticCurveTo(lx, ly, mx, my); x.lineTo(px, py); x.stroke();
+    // brighter core highlight for a painterly streak
+    x.shadowBlur = 0; x.strokeStyle = CORE; x.lineWidth = lw * 0.5;
+    x.beginPath(); x.moveTo(lx, ly); x.lineTo(px, py); x.stroke();
+
+    lx = px; ly = py;
+  }
+  requestAnimationFrame(frame);
+}
+
 /* ---------- Preload ---------- */
 function preload() {
   for (let i = 0; i < FRAME_COUNT; i++) {
@@ -700,6 +759,7 @@ setupMobileMenu();
 setupOrderForm();
 setupVideoPlayback();
 setupCursorGlow();
+setupBrush();
 setupMagnetic();
 setupCardTilt();
 setupShowcase();
