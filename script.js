@@ -480,19 +480,16 @@ function setupBrush() {
     x.globalCompositeOperation = "source-over";
 
     if (px === null || (px === lx && py === ly)) return;
-    const dist = Math.hypot(px - lx, py - ly);
-    // bold throughout; slow strokes paint even fatter — brush feel
-    const target = Math.max(18 * dpr, Math.min(58 * dpr, (1900 * dpr) / (dist + 42)));
-    lw += (target - lw) * 0.3;
+    // constant thick brush — same fat stroke at any speed, fully opaque
+    lw += (48 * dpr - lw) * 0.3;
     const mx = (lx + px) / 2, my = (ly + py) / 2;
 
     x.lineCap = "round"; x.lineJoin = "round";
-    // soft outer body
     x.strokeStyle = COL; x.lineWidth = lw;
-    x.shadowColor = COL; x.shadowBlur = 10 * dpr;
+    x.shadowColor = COL; x.shadowBlur = 6 * dpr;
     x.beginPath(); x.moveTo(lx, ly); x.quadraticCurveTo(lx, ly, mx, my); x.lineTo(px, py); x.stroke();
-    // brighter core highlight for a painterly streak
-    x.shadowBlur = 0; x.strokeStyle = CORE; x.lineWidth = lw * 0.5;
+    // lighter core streak for a painterly feel
+    x.shadowBlur = 0; x.strokeStyle = CORE; x.lineWidth = lw * 0.46;
     x.beginPath(); x.moveTo(lx, ly); x.lineTo(px, py); x.stroke();
 
     lx = px; ly = py;
