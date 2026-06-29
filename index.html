@@ -9,8 +9,8 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Heebo:wght@300;400;500;700&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=18" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&family=Heebo:wght@300;400;500;700&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=20" />
 </head>
 <body>
   <div id="loader" class="loader">
@@ -84,6 +84,8 @@
     <div class="hero-grade glow"></div>
     <div class="hero-grade vignette"></div>
     <div class="hero-grade scrim"></div>
+    <div class="hero-grade fog" aria-hidden="true"><span></span><span></span></div>
+    <div class="portal" id="heroPortal" aria-hidden="true"></div>
     <div class="sticky-stage">
       <div class="hero-overlay">
         <h1 class="hero-title shimmer">LUMICAS</h1>
@@ -118,6 +120,23 @@
           <span class="hero-caption-num">04</span>
           <h3 class="hero-caption-name" data-i18n="f4">UV-protected lenses</h3>
           <p class="hero-caption-desc" data-i18n="f4_d">Sharp view, eyes protected all day.</p>
+        </div>
+      </div>
+      <!-- Technical HUD: editorial monospace overlay (IGLOO-style framing) -->
+      <div class="hero-hud" id="heroHud" aria-hidden="true">
+        <div class="hud-corner hud-tl">
+          <span class="hud-brand">LUMICAS<sup>®</sup></span>
+          <span class="hud-line" data-i18n="hud_tag">AI SMART EYEWEAR</span>
+          <span class="hud-line hud-dim" data-i18n="hud_copy">© 2026 — ALL RIGHTS RESERVED</span>
+        </div>
+        <div class="hud-corner hud-bl">
+          <span class="hud-line"><span class="hud-frame">FRAME&nbsp;</span><i id="hudFrame">001</i>&nbsp;/&nbsp;200</span>
+          <span class="hud-line hud-dim"><i class="hud-dot"></i><span data-i18n="hud_sound">SOUND — ON</span></span>
+        </div>
+        <div class="hud-corner hud-br">
+          <span class="hud-line" data-i18n="hud_scroll">SCROLL TO EXPLORE</span>
+          <span class="hud-track"><i id="hudProg"></i></span>
+          <span class="hud-line hud-pct"><i id="hudPct">00</i>%</span>
         </div>
       </div>
       <div class="scroll-hint"><span></span></div>
@@ -375,7 +394,7 @@
     </footer>
   </main>
 
-  <script src="i18n.js?v=24"></script>
-  <script src="script.js?v=10"></script>
+  <script src="i18n.js?v=25"></script>
+  <script src="script.js?v=11"></script>
 </body>
 </html>

@@ -18,6 +18,20 @@ const images = new Array(FRAME_COUNT);
 let loadedCount = 0;
 let currentFrame = -1;
 
+/* Weighty scrub state: the canvas lags toward the scroll-mapped frame (lerp),
+   giving the heavy cinematic inertia of the reference instead of snapping. */
+let targetFrame = 0;
+let displayedFrame = 0;
+let rafScrub = false;
+const SMOOTH = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : 0.16;
+
+/* Technical HUD refs (frame counter, scroll %, portal halo) */
+const hud = document.getElementById("heroHud");
+const hudFrameEl = document.getElementById("hudFrame");
+const hudPctEl = document.getElementById("hudPct");
+const hudProgEl = document.getElementById("hudProg");
+const heroPortal = document.getElementById("heroPortal");
+
 /* ---------- Canvas sizing (cover-fit, retina-aware) ---------- */
 const CANVAS_BG = "#0a0d16";
 
@@ -28,7 +42,9 @@ function resizeCanvas() {
   canvas.style.width = window.innerWidth + "px";
   canvas.style.height = window.innerHeight + "px";
   currentFrame = -1;
-  drawFrame(frameForScroll());
+  targetFrame = displayedFrame = frameForScroll();
+  drawFrame(targetFrame);
+  updateHud(targetFrame);
 }
 
 /* Cover-fit: fill the viewport, crop overflow. Product is centered with
@@ -56,6 +72,36 @@ function drawFrame(index) {
   }
 }
 
+/* ---------- Weighty, smoothed scrub ----------
+ * Lerp the displayed frame toward the scroll target every rAF for the heavy,
+ * cinematic inertia of the reference. The loop parks itself once it catches up,
+ * so it costs nothing when idle (reduced-motion → SMOOTH=1 = instant snap). */
+function scrubLoop() {
+  displayedFrame += (targetFrame - displayedFrame) * SMOOTH;
+  if (Math.abs(targetFrame - displayedFrame) < 0.4) displayedFrame = targetFrame;
+  const idx = Math.round(displayedFrame);
+  drawFrame(idx);
+  updateHud(idx);
+  if (displayedFrame !== targetFrame) requestAnimationFrame(scrubLoop);
+  else rafScrub = false;
+}
+function startScrub() {
+  if (!rafScrub) { rafScrub = true; requestAnimationFrame(scrubLoop); }
+}
+
+/* ---------- Technical HUD: live frame counter, scroll %, portal intensity ---------- */
+function updateHud(idx) {
+  const p = heroProgress();
+  if (hudFrameEl) hudFrameEl.textContent = String(Math.min(FRAME_COUNT, idx + 1)).padStart(3, "0");
+  if (hudPctEl) hudPctEl.textContent = String(Math.round(p * 100)).padStart(2, "0");
+  if (hudProgEl) hudProgEl.style.width = (Math.min(1, Math.max(0, p)) * 100).toFixed(1) + "%";
+  if (heroPortal) {
+    const fade = p < 0.93 ? 1 : Math.max(0, 1 - (p - 0.93) / 0.07);
+    const inten = Math.sin(Math.min(Math.max(p, 0), 1) * Math.PI); // 0 → peak mid-scrub → 0
+    heroPortal.style.setProperty("--portal", (inten * fade).toFixed(3));
+  }
+}
+
 /* ---------- Scroll → frame mapping ---------- */
 function frameForScroll() {
   const section = document.getElementById("scrollVideo");
@@ -71,7 +117,8 @@ function onScroll() {
   if (!ticking) {
     ticking = true;
     requestAnimationFrame(() => {
-      drawFrame(frameForScroll());
+      targetFrame = frameForScroll();
+      startScrub();
       fadeHero();
       updateHeroCaptions();
       updateNav();
@@ -111,6 +158,7 @@ function fadeHero() {
   const fade = p < 0.93 ? 1 : Math.max(0, 1 - (p - 0.93) / 0.07);
   canvas.style.opacity = fade;
   heroGrades.forEach((g) => { g.style.opacity = fade; });
+  if (hud) hud.style.opacity = fade;
 }
 
 function updateHeroCaptions() {
