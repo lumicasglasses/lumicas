@@ -441,6 +441,68 @@ function buildMarquee(dict) {
   track.innerHTML = half + half; // duplicate so the -50% loop is seamless
 }
 
+/* ---------- Brush paint intro ----------
+ * On entry the screen is covered in brand orange with the wordmark; once the
+ * hero frames are ready, staggered brush strokes wipe the paint away (erase) to
+ * reveal the site. Skipped for reduced-motion. */
+function playIntro() {
+  const c = document.getElementById("introPaint");
+  const brand = document.getElementById("introBrand");
+  if (!c) return;
+  if (reduceMotion()) { document.body.classList.add("intro-done"); return; }
+  const x = c.getContext("2d");
+  let w, h, dpr;
+  const COL = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#ef6c2e";
+  const fill = () => { x.globalCompositeOperation = "source-over"; x.fillStyle = COL; x.fillRect(0, 0, w, h); };
+  function size() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = c.width = Math.floor(window.innerWidth * dpr);
+    h = c.height = Math.floor(window.innerHeight * dpr);
+    c.style.width = window.innerWidth + "px"; c.style.height = window.innerHeight + "px";
+    fill();
+  }
+  size();                    // paints solid orange immediately — no page flash
+  window.addEventListener("resize", size);
+
+  const N = 9;
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  function reveal(p) {
+    fill();                                   // solid orange...
+    x.globalCompositeOperation = "destination-out";  // ...then erase brush bands
+    x.lineCap = "round";
+    for (let i = 0; i < N; i++) {
+      const cy = h * (i + 0.5) / N;
+      const dir = i % 2 ? 1 : -1;             // alternate sweep direction
+      const local = Math.max(0, Math.min(1, (p - i * 0.012) / 0.9));
+      if (local <= 0) continue;
+      const len = (w + h / N) * ease(local);
+      const x0 = dir > 0 ? -h / N * 0.6 : w + h / N * 0.6;
+      x.lineWidth = (h / N) * 1.4;
+      x.beginPath(); x.moveTo(x0, cy); x.lineTo(x0 + dir * len, cy); x.stroke();
+    }
+    x.globalCompositeOperation = "source-over";
+  }
+
+  let phase = "hold", t0 = performance.now(), framesReady = false;
+  window.__introReady = () => { framesReady = true; };
+  const HOLD = 520, REVEAL = 820;
+  function loop(now) {
+    if (phase === "done") return;
+    requestAnimationFrame(loop);
+    const t = now - t0;
+    if (phase === "hold") {
+      brand.style.opacity = Math.min(1, t / 300);
+      if (t > HOLD && (framesReady || t > 3200)) { phase = "reveal"; t0 = now; }
+    } else if (phase === "reveal") {
+      const p = Math.min(1, t / REVEAL);
+      reveal(p);
+      brand.style.opacity = Math.max(0, 1 - p / 0.4);
+      if (p >= 1) { phase = "done"; document.body.classList.add("intro-done"); }
+    }
+  }
+  requestAnimationFrame(loop);
+}
+
 /* ---------- Paint brush trail that follows the cursor ----------
  * A full-screen canvas (multiply-blended like ink on paper) draws a thick,
  * tapering orange brush stroke along the pointer path. Slow moves paint
@@ -519,6 +581,7 @@ function onAllLoaded() {
   loader.classList.add("hidden");
   resizeCanvas();
   drawFrame(frameForScroll());
+  if (window.__introReady) window.__introReady(); // let the paint intro wipe away
 }
 
 /* ---------- Reveal on scroll ----------
@@ -746,6 +809,7 @@ window.addEventListener("resize", () => {
   updateReveals();
 });
 document.getElementById("year").textContent = new Date().getFullYear();
+playIntro();
 setupLang();
 resizeCanvas();
 setupReveals();

@@ -1385,6 +1385,21 @@ body { background: var(--bg); color: var(--ink); }
 /* 20 — Focus ring → warm */
 :focus-visible { outline-color: var(--accent); }
 
+/* 21a — Brush paint intro: orange covers the screen on entry, then brush
+   strokes wipe it away to reveal the site */
+#introPaint { position: fixed; inset: 0; z-index: 9998; pointer-events: none; }
+.intro-brand {
+  position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.intro-brand span {
+  color: #fff; font-family: var(--font-display); font-weight: 700;
+  letter-spacing: .22em; padding-inline-start: .22em;
+  font-size: clamp(34px, 9vw, 118px); text-shadow: 0 6px 44px rgba(120,42,0,.4);
+}
+body.intro-done #introPaint, body.intro-done .intro-brand { display: none; }
+@media (prefers-reduced-motion: reduce) { #introPaint, .intro-brand { display: none !important; } }
+
 /* 21b — Cleaner hero: hide the floating side chips, drop the wordmark low so
    the product stays fully visible above it */
 .hero-chips { display: none !important; }
