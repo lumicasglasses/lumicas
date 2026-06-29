@@ -463,36 +463,34 @@ function setupBrush() {
 
   const css = getComputedStyle(document.documentElement);
   const COL = (css.getPropertyValue("--accent").trim() || "#ef6c2e");
-  const CORE = (css.getPropertyValue("--accent-bright").trim() || "#ff9559");
 
-  let px = null, py = null, lx = null, ly = null, lw = 18;
+  // Keep the recent pointer path; redraw a FULLY OPAQUE stroke each frame. The
+  // tail disappears by tapering its WIDTH to a point (never by going
+  // transparent), and old points drop off by age so the brush follows + shrinks
+  // when you stop. No alpha fade anywhere → solid orange at all times.
+  const pts = [];
+  const LIFE = 620;          // ms a point stays in the trail
+  const MAXW = 50;           // head width (css px)
   window.addEventListener("pointermove", (e) => {
-    px = e.clientX * dpr; py = e.clientY * dpr;
-    if (lx === null) { lx = px; ly = py; }
+    pts.push({ x: e.clientX * dpr, y: e.clientY * dpr, t: performance.now() });
+    if (pts.length > 140) pts.shift();
   }, { passive: true });
 
-  function frame() {
+  function frame(now) {
     requestAnimationFrame(frame);
-    // dissolve the existing trail slowly so it reads as a bold lingering swoosh
-    x.globalCompositeOperation = "destination-out";
-    x.fillStyle = "rgba(0,0,0,0.045)";
-    x.fillRect(0, 0, w, h);
-    x.globalCompositeOperation = "source-over";
-
-    if (px === null || (px === lx && py === ly)) return;
-    // constant thick brush — same fat stroke at any speed, fully opaque
-    lw += (48 * dpr - lw) * 0.3;
-    const mx = (lx + px) / 2, my = (ly + py) / 2;
-
-    x.lineCap = "round"; x.lineJoin = "round";
-    x.strokeStyle = COL; x.lineWidth = lw;
-    x.shadowColor = COL; x.shadowBlur = 6 * dpr;
-    x.beginPath(); x.moveTo(lx, ly); x.quadraticCurveTo(lx, ly, mx, my); x.lineTo(px, py); x.stroke();
-    // lighter core streak for a painterly feel
-    x.shadowBlur = 0; x.strokeStyle = CORE; x.lineWidth = lw * 0.46;
-    x.beginPath(); x.moveTo(lx, ly); x.lineTo(px, py); x.stroke();
-
-    lx = px; ly = py;
+    x.clearRect(0, 0, w, h);
+    while (pts.length && now - pts[0].t > LIFE) pts.shift();
+    if (pts.length < 2) return;
+    x.lineCap = "round"; x.lineJoin = "round"; x.strokeStyle = COL;
+    for (let i = 1; i < pts.length; i++) {
+      const a = pts[i - 1], b = pts[i];
+      const f = i / (pts.length - 1);          // 0 = old tail → 1 = head (cursor)
+      x.lineWidth = Math.max(2.5 * dpr, MAXW * dpr * f);
+      x.beginPath();
+      x.moveTo(a.x, a.y);
+      x.lineTo(b.x, b.y);
+      x.stroke();
+    }
   }
   requestAnimationFrame(frame);
 }
